@@ -10,7 +10,7 @@ window.addEvent('domready', function() {
 		title: 'Colony',
 		composer: 'Barry van Oudtshoorn',
 		url: 'www.barryvan.com.au',
-		audio: 'colony.ogg',
+		audio: 'http://www.barryvan.com.au/music/colony',
 		comment: '',
 		tempo: 110,
 		beatRows: 8,

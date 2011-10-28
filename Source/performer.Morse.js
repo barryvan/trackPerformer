@@ -83,5 +83,5 @@ barryvan.tp.performer.Morse = new Class({
 			this._baseline = this._canvas.height + this.options.position;
 		}
 		this._baseline = Math.floor(this._baseline) + 0.5;
-	},
+	}
 });

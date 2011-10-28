@@ -17,6 +17,7 @@ barryvan.tp.Controller = new Class({
 	
 	Binds: [
 		'perform',
+		'_determinePreferredAudio',
 		'_resize',
 		'_renderMeta',
 		'_reset',
@@ -46,6 +47,8 @@ barryvan.tp.Controller = new Class({
 	_context: null,
 	_audio: null,
 	_performers: null,
+	
+	_audioFormat: '',
 	
 	_tickLength: 20,
 	_ticksElapsed: 0,
@@ -82,6 +85,8 @@ barryvan.tp.Controller = new Class({
 		this._context.fillRect(0, 0, this._canvas.width, this._canvas.height);
 		
 		this._audio = new Audio();
+		
+		this._determinePreferredAudio();
 	},
 	
 	perform: function(performanceData) {
@@ -89,6 +94,22 @@ barryvan.tp.Controller = new Class({
 		
 		this._renderMeta();
 		this._reset();
+	},
+	
+	_determinePreferredAudio: function() {
+		var modes = {
+			'audio/mpeg': 'mp3',
+			'audio/ogg': 'ogg',
+			'audio/mp4': 'm4a'
+		};
+		
+		for (var type in modes) {
+			if (!modes.hasOwnProperty(type)) continue;
+			if (this._audio.canPlayType(type).replace(/no/, '')) {
+				this._audioFormat = modes[type];
+				break;
+			}
+		}
 	},
 	
 	_resize: function() {
@@ -175,7 +196,7 @@ barryvan.tp.Controller = new Class({
 	},
 	
 	_initAudio: function() {
-		this._audio.src = this._perfData.audio;
+		this._audio.src = this._perfData.audio + '.' + this._audioFormat;
 		this._audio.loop = false;
 		this._audio.load();
 		this._audio.pause();
