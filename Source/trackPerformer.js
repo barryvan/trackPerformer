@@ -223,6 +223,7 @@ barryvan.tp.Controller = new Class({
 	},
 	
 	_tick: function(timestamp) {
+		timestamp = timestamp || (new Date());
 		//this._currentTime = timestamp - this._offsetTime;
 		//this._currentTime = this._audio.currentTime * 1000;
 		this._currentTime = ((timestamp - this._offsetTime) + (this._audio.currentTime * 1000)) / 2; // Average of the two
