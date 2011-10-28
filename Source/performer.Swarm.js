@@ -107,7 +107,7 @@ barryvan.tp.performer.Swarm = new Class({
 			
 			this._context.fillStyle = p.c + (this._vitality / 100) + ')';
 			this._context.beginPath();
-			this._context.arc(p.x, p.y, size, Math.TWOPI, false);
+			this._context.arc(p.x, p.y, size, 0, Math.TWOPI, false);
 			this._context.closePath();
 			this._context.fill();
 		}
