@@ -7,6 +7,20 @@
 				margin: 0;
 				padding: 0;
 			}
+			a > img {
+				position: absolute;
+				top: 0;
+				right: 0;
+				border: 0;
+				z-index: 100;
+				opacity: 0.1;
+				-moz-transition: opacity 0.5s;
+				-webkit-transition: opacity 0.5s;
+				transition: opacity 0.5s;
+			}
+			a > img:hover {
+				opacity: 1.0;
+			}
 		</style>
 		<script type="text/javascript" src="https://raw.github.com/barryvan/trackPerformer/master/Source/mootools-core.js"></script>
 		<script type="text/javascript" src="https://raw.github.com/barryvan/trackPerformer/master/Source/mootools-more.js"></script>
@@ -21,6 +35,6 @@
 	</head>
 	
 	<body>
-		
+		<a href="http://github.com/barryvan/trackPerformer"><img style="" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"/></a>
 	</body>
 </html>
