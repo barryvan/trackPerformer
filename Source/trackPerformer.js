@@ -4,7 +4,7 @@ window.requestAnimFrame = (function(){
 					window.mozRequestAnimationFrame    || 
 					window.oRequestAnimationFrame      || 
 					window.msRequestAnimationFrame     || 
-					function(/* function */ callback, /* DOMElement */ element){
+					function(callback, element){
 						window.setTimeout(callback, 1000 / 60);
 					};
 })();
@@ -23,6 +23,8 @@ barryvan.tp.Controller = new Class({
 		'_reset',
 		'_calcTicks',
 		'_initPerformers',
+		'_initPrefilters',
+		'_initPostfilters',
 		'_initAudio',
 		'_start',
 		'_tick',
@@ -48,6 +50,9 @@ barryvan.tp.Controller = new Class({
 	_audio: null,
 	_performers: null,
 	
+	_prefilters: null,
+	_postfilters: null,
+	
 	_audioFormat: '',
 	
 	_tickLength: 20,
@@ -58,16 +63,24 @@ barryvan.tp.Controller = new Class({
 	_currentPattern: 0,
 	_currentRow: 0,
 	
+	_initialCount: 0,
+	
+	_container: null,
+	
 	initialize: function(options, container) {
 		this.setOptions(options);
+		
+		this._container = $(container) || $(document.body);
+		
+		var dimensions = this._container.getSize();
 		
 		this._canvas = new Element('canvas', {
 			'class': 'trackPerformer',
 			'events': {
 				'click': this._toggle
 			},
-			'width': window.innerWidth,
-			'height': window.innerHeight,
+			'width': dimensions.x,
+			'height': dimensions.y,
 			'styles': {
 				'position': 'absolute',
 				'top': 0,
@@ -113,17 +126,32 @@ barryvan.tp.Controller = new Class({
 	},
 	
 	_resize: function() {
+		var dimensions = this._container.getSize();
+		
 		this._canvas.set({
-			'width': window.innerWidth,
-			'height': window.innerHeight
+			'width': dimensions.x,
+			'height': dimensions.y
 		});
+		
+		for (var i = 0; i < this._prefilters.length; i++) {
+			if (this._prefilters[i] && this._prefilters[i].resize) {
+				this._prefilters[i].resize(dimensions.x, dimensions.y);
+			}
+		}
+		
 		for (var i = 0; i < this._performers.length; i++) {
 			var instrumentPerformers = this._performers[i];
 			if (!(instrumentPerformers && instrumentPerformers.length)) continue;
 			for (var j = 0; j < instrumentPerformers.length; j++) {
 				if (instrumentPerformers[j] && instrumentPerformers[j].resize) {
-					instrumentPerformers[j].resize(window.innerWidth, window.innerHeight);
+					instrumentPerformers[j].resize(dimensions.x, dimensions.y);
 				}
+			}
+		}
+		
+		for (var i = 0; i < this._postfilters.length; i++) {
+			if (this._postfilters[i] && this._postfilters[i].resize) {
+				this._postfilters[i].resize(dimensions.x, dimensions.y);
 			}
 		}
 	},
@@ -170,6 +198,8 @@ barryvan.tp.Controller = new Class({
 		
 		this._calcTicks();
 		this._initPerformers();
+		this._initPrefilters();
+		this._initPostfilters();
 		this._initAudio();
 	},
 	
@@ -192,6 +222,29 @@ barryvan.tp.Controller = new Class({
 				var opts = Object.merge({}, this.options, perf.options);
 				this._performers[i].push(new perf.performer(this._context, this._canvas, opts));
 			}
+		}
+	},
+	
+	_initPrefilters: function() {
+		this._prefilters = [];
+		if (!this._perfData.prefilters) return;
+		for (var i = 0; i < this._perfData.prefilters.length; i++) {
+			var item = this._perfData.prefilters[i];
+			if (typeOf(item.filter) !== 'class') continue;
+			var opts = Object.merge({}, this.options, item.options);
+			this._prefilters.push(new item.filter(this._context, this._canvas, opts));
+		}
+	},
+	
+	_initPostfilters: function() {
+		// TODO code duplication is bad
+		this._postfilters = [];
+		if (!this._perfData.postfilters) return;
+		for (var i = 0; i < this._perfData.postfilters.length; i++) {
+			var item = this._perfData._postfilters[i];
+			if (typeOf(item.filter) !== 'class') continue;
+			var opts = Object.merge({}, this.options, item.options);
+			this._postfilters.push(new item.filter(this._context, this._canvas, opts));
 		}
 	},
 	
@@ -219,18 +272,18 @@ barryvan.tp.Controller = new Class({
 		this._playing = true;
 		this._audio.play();
 		
-		window.requestAnimFrame(this._tick);
+		window.requestAnimFrame(this._tick, this._canvas);
 	},
 	
 	_tick: function(timestamp) {
 		timestamp = timestamp || (new Date());
-		//this._currentTime = timestamp - this._offsetTime;
-		//this._currentTime = this._audio.currentTime * 1000;
 		this._currentTime = ((timestamp - this._offsetTime) + (this._audio.currentTime * 1000)) / 2; // Average of the two
 		var currentTicks = Math.floor(this._currentTime / this._tickLength);
 		var processCount = currentTicks - this._ticksElapsed;
 		
-		//console.log('Delta time: %d', (this._currentTime / 1000) - this._audio.currentTime)
+		for (var i = 0; i < this._prefilters.length; i++) {
+			if (this._prefilters[i].frame) this._prefilters[i].frame();
+		}
 		
 		this._context.fillStyle = this.options.background;
 		this._context.fillRect(0, 0, this._canvas.width, this._canvas.height);
@@ -278,9 +331,13 @@ barryvan.tp.Controller = new Class({
 			}
 		}
 		
+		for (var i = 0; i < this._postfilters.length; i++) {
+			if (this._postfilters[i].frame) this._postfilters[i].frame();
+		}
+		
 		this._renderMeta();
 		
-		if (this._playing) window.requestAnimFrame(this._tick);
+		if (this._playing) window.requestAnimFrame(this._tick, this._canvas);
 	},
 	
 	_pause: function() {

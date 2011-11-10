@@ -7,6 +7,45 @@
 				margin: 0;
 				padding: 0;
 			}
+			
+			#meta {
+				position: absolute;
+				bottom: 8px;
+				left: 8px;
+				font-family: 'Trebuchet MS';
+				padding: 8px;
+				font-size: 10pt;
+				color: #ccc;
+				background: #222;
+				-moz-box-shadow: 0 0 4px #000;
+				-webkit-box-shadow: 0 0 4px #000;
+				box-shadow: 0 0 4px #000;
+				-moz-border-radius: 4px;
+				-webkit-border-radius: 4px;
+				border-radius: 4px;
+			}
+			
+			#meta > .title {
+				color: #fff;
+			}
+			
+			#meta > .composer {
+				
+			}
+			
+			#meta > .url {
+				
+			}
+			
+			#meta > .url > a {
+				color: #ccc;
+				text-decoration: none;
+			}
+			
+			#meta > .url > a:hover {
+				color: #fff;
+				text-decoration: none;
+			}
 		</style>
 		<script type="text/javascript" src="../../Source/mootools-core.js"></script>
 		<script type="text/javascript" src="../../Source/mootools-more.js"></script>
@@ -21,6 +60,10 @@
 	</head>
 	
 	<body>
-		
+		<div id="meta">
+			<div class="title">Colony</div>
+			<div class="composer">Barry van Oudtshoorn</div>
+			<div class="url"><a href="http://www.barryvan.com.au/">barryvan.com.au</a></div>
+		</div>
 	</body>
 </html>

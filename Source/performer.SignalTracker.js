@@ -33,8 +33,6 @@ barryvan.tp.performer.SignalTracker = new Class({
 	_vitality: 0,
 	_colourPart: 0,
 	
-	/* TODO: Vitality: it needs to die out over time like the Swarms do */
-	
 	initialize: function(context, canvas, options) {
 		this.parent(context, canvas, options);
 		
@@ -57,6 +55,8 @@ barryvan.tp.performer.SignalTracker = new Class({
 	},
 	
 	noteEvent: function(data) {
+		if (!this.filterNote(data.note)) return;
+		
 		if (data.note < 0) {
 			this._vitality = this._vitality / 2;
 			return;
@@ -79,11 +79,15 @@ barryvan.tp.performer.SignalTracker = new Class({
 			oldX = 0;
 		}
 		
-		if (this._glissPoint) {
-			this._y = (this._targetY - this._sourceY) * this.options.transition(this.options.glissLength, this._glissPoint) + this._sourceY;
-			
-			this._glissPoint = this._glissPoint - 1;
-			if (this._glissPoint < 0) this._glissPoint = 0;
+		if (this.options.glissLength > 1) {
+			if (this._glissPoint) {
+				this._y = (this._targetY - this._sourceY) * this.options.transition(this.options.glissLength, this._glissPoint) + this._sourceY;
+				
+				this._glissPoint = this._glissPoint - 1;
+				if (this._glissPoint < 0) this._glissPoint = 0;
+			}
+		} else {
+			this._y = this._targetY;
 		}
 		
 		if (!this._vitality) return;
