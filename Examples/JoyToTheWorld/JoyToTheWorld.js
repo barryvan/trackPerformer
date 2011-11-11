@@ -18,12 +18,7 @@ window.addEvent('domready', function() {
 		measureRows: 32,
 		
 		prefilters: [
-			/*{
-				filter: barryvan.tp.filter.Grid,
-				options: {
-					
-				}
-			},*/ {
+			{
 				filter: barryvan.tp.filter.Pick,
 				options: {
 					
@@ -32,7 +27,12 @@ window.addEvent('domready', function() {
 		],
 		
 		postfilters: [
-			
+			{
+				filter: barryvan.tp.filter.FPS,
+				options: {
+					element: $('fps')
+				}
+			}
 		],
 		
 		instruments: [
@@ -42,12 +42,12 @@ window.addEvent('domready', function() {
 					{
 						performer: barryvan.tp.performer.Oscillator,
 						options: {
-							colour: '#c00',
-							vertical: 32,
-							horizontal: -40,
-							length: 16,
-							thickness: 16,
-							stepSize: 8,
+							colour: '#600',
+							vertical: 0,
+							horizontal: -50,
+							length: 20,
+							thickness: 20,
+							stepSize: 10,
 							middle: 70
 						}
 					}
@@ -58,12 +58,12 @@ window.addEvent('domready', function() {
 					{
 						performer: barryvan.tp.performer.Oscillator,
 						options: {
-							colour: '#c00',
-							vertical: 32,
-							horizontal: 40,
-							length: 16,
-							thickness: 16,
-							stepSize: 8,
+							colour: '#600',
+							vertical: 0,
+							horizontal: 50,
+							length: 20,
+							thickness: 20,
+							stepSize: 10,
 							middle: 58
 						}
 					}
@@ -71,13 +71,20 @@ window.addEvent('domready', function() {
 			}, {
 				name: 'Drums',
 				performers: [
-					/*{
-						performer: barryvan.tp.performer.Transformer,
+					{
+						performer: barryvan.tp.performer.Oscillator,
 						options: {
+							coloru: '#729fcf',
+							vertical: 0,
+							horizontal: 0,
+							length: 400,
+							thickness: 2,
+							stepSize: 100,
+							middle: 37,
 							filterLow: 35,
 							filterHigh: 37
 						}
-					}*/
+					}
 				]
 			}, {
 				name: 'Lead',
@@ -85,7 +92,7 @@ window.addEvent('domready', function() {
 					{
 						performer: barryvan.tp.performer.SignalTracker,
 						options: {
-							colour: '#fff',
+							colour: '#c00',
 							middle: 78,
 							knots: 1,
 							glissLength: 1,
@@ -94,6 +101,18 @@ window.addEvent('domready', function() {
 							length: 8,
 							//vitalisation: 'auto',
 							vitalisation: 50,
+							filterLow: 60
+						}
+					}, {
+						performer: barryvan.tp.performer.Oscillator,
+						options: {
+							colour: '#c00',
+							middle: 78,
+							vertical: 0,
+							horizontal: 185,
+							length: 20,
+							thickness: 20,
+							stepSize: 10,
 							filterLow: 60
 						}
 					}
@@ -133,11 +152,11 @@ window.addEvent('domready', function() {
 						performer: barryvan.tp.performer.Oscillator,
 						options: {
 							colour: '#fce94f',
-							vertical: 32,
-							horizontal: 140,
-							length: 16,
-							thickness: 16,
-							stepSize: 8,
+							vertical: 0,
+							horizontal: 130,
+							length: 20,
+							thickness: 20,
+							stepSize: 10,
 							middle: 58
 						}
 					}
@@ -149,12 +168,12 @@ window.addEvent('domready', function() {
 						performer: barryvan.tp.performer.Oscillator,
 						options: {
 							colour: '#fce94f',
-							vertical: 32,
-							horizontal: -140,
-							length: 16,
-							thickness: 16,
-							stepSize: 8,
-							middle: 46
+							vertical: 0,
+							horizontal: -130,
+							length: 20,
+							thickness: 20,
+							stepSize: 10,
+							middle: 70
 						}
 					}
 				]
@@ -165,10 +184,23 @@ window.addEvent('domready', function() {
 						performer: barryvan.tp.performer.ShimmerGrid,
 						options: {
 							vitalisation: 100,
+							probability: 0.15,
 							spacing: 20,
-							colour: '#4e9a06',
+							//colour: '#4e9a06',
+							colour: '#000',
 							size: 10,
 							jitter: 10
+						}
+					}, {
+						performer: barryvan.tp.performer.Oscillator,
+						options: {
+							colour: 'rgba(255,255,255,0.75)',
+							vertical: 0,
+							horizontal: 90,
+							length: 220,
+							thickness: 2,
+							stepSize: 10,
+							middle: 64
 						}
 					}
 				]

@@ -241,7 +241,7 @@ barryvan.tp.Controller = new Class({
 		this._postfilters = [];
 		if (!this._perfData.postfilters) return;
 		for (var i = 0; i < this._perfData.postfilters.length; i++) {
-			var item = this._perfData._postfilters[i];
+			var item = this._perfData.postfilters[i];
 			if (typeOf(item.filter) !== 'class') continue;
 			var opts = Object.merge({}, this.options, item.options);
 			this._postfilters.push(new item.filter(this._context, this._canvas, opts));

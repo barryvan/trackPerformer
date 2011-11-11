@@ -26,6 +26,8 @@ barryvan.tp.performer.Oscillator = new Class({
 	},
 	
 	noteEvent: function(data) {
+		if (!this.filterNote(data.note)) return;
+		
 		if (data.note < 0) {
 			// Note cut / note off
 			return;
