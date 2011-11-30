@@ -111,9 +111,9 @@ barryvan.tp.Controller = new Class({
 	
 	_determinePreferredAudio: function() {
 		var modes = {
+			'audio/mp4': 'm4a',
 			'audio/mpeg': 'mp3',
-			'audio/ogg': 'ogg',
-			'audio/mp4': 'm4a'
+			'audio/ogg': 'ogg'
 		};
 		
 		for (var type in modes) {
