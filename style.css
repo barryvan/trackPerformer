@@ -29,7 +29,8 @@ a:hover {
 
 a.demoLink {
 	display: block;
-	padding: 24px 8px;
+	padding: 8px;
+	margin: 8px 0;
 	-moz-border-radius: 8px;
 	-webkit-border-radius: 8px;
 	border-radius: 8px;
@@ -52,8 +53,13 @@ a.demoLink {
 	text-shadow: 0 1px 1px rgba(0,0,0,0.25);
 }
 
-a.demoLink > strong {
+a.demoLink > .title {
 	color: #fff;
+	font-size: 150%;
+}
+
+a.demoLink > .composer {
+	
 }
 
 a.demoLink:hover {
