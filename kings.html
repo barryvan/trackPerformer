@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+	<head>
+		<title>TrackPerformer: We Three Kings</title>
+		<style>
+			body {
+				margin: 0;
+				padding: 0;
+				background: rgb(12,7,14);
+				font-family: 'Trebuchet MS';
+				font-size: 10pt;
+			}
+			
+			a > img {
+				position: absolute;
+				top: 0;
+				right: 0;
+				border: 0;
+				z-index: 100;
+				opacity: 0.1;
+				-moz-transition: opacity 0.5s;
+				-webkit-transition: opacity 0.5s;
+				transition: opacity 0.5s;
+			}
+			
+			a > img:hover {
+				opacity: 1.0;
+			}
+			
+			#container {
+				position: relative;
+				width: 400px;
+				height: 400px;
+				margin: 24px auto;
+			}
+			
+			#container > canvas {
+				background: #000;
+			}
+			
+			#container > .overlay {
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				z-index: 2;
+				box-shadow: 0 2px 8px -2px #000;
+				border: solid 4px #000;
+			}
+			
+			#meta {
+				position: absolute;
+				bottom: 8px;
+				left: 8px;
+				padding: 8px;
+				color: #444;
+				background: #060606;
+				-moz-box-shadow: inset 0 0 4px #000;
+				-webkit-box-shadow: inset 0 0 4px #000;
+				box-shadow: inset 0 0 4px #000;
+				-moz-border-radius: 4px;
+				-webkit-border-radius: 4px;
+				border-radius: 4px;
+			}
+			
+			#meta > .title {
+				color: #666;
+			}
+			
+			#meta > .composer {
+				
+			}
+			
+			#meta > .url {
+				
+			}
+			
+			#meta > .url > a {
+				color: #444;
+				text-decoration: none;
+			}
+			
+			#meta > .url > a:hover {
+				color: #666;
+				text-decoration: none;
+			}
+
+			#fps {
+				position: absolute;
+				bottom: 0;
+				right: 0;
+				width: 40px;
+				text-align: right;
+				padding: 4px;
+				color: #222;
+				width: 100px;
+				font-size: 8pt;
+			}
+		</style>
+		
+			<script type="text/javascript" src="https://raw.github.com/barryvan/trackPerformer/master/Source/mootools-core.js"></script>
+		<script type="text/javascript" src="https://raw.github.com/barryvan/trackPerformer/master/Source/mootools-more.js"></script>
+		<script type="text/javascript" src="https://raw.github.com/barryvan/trackPerformer/master/Source/trackPerformer.js"></script>
+
+		<script type="text/javascript" src="https://raw.github.com/barryvan/trackPerformer/master/Source/performer.Base.js"></script>
+		<script type="text/javascript" src="https://raw.github.com/barryvan/trackPerformer/master/Source/performer.Morse.js"></script>
+		<script type="text/javascript" src="https://raw.github.com/barryvan/trackPerformer/master/Source/performer.Oscillator.js"></script>
+		<script type="text/javascript" src="https://raw.github.com/barryvan/trackPerformer/master/Source/performer.ShimmerGrid.js"></script>
+		<script type="text/javascript" src="https://raw.github.com/barryvan/trackPerformer/master/Source/performer.SignalTracker.js"></script>
+		<script type="text/javascript" src="https://raw.github.com/barryvan/trackPerformer/master/Source/performer.Swarm.js"></script>
+		<script type="text/javascript" src="https://raw.github.com/barryvan/trackPerformer/master/Source/performer.Thumper.js"></script>
+		<script type="text/javascript" src="https://raw.github.com/barryvan/trackPerformer/master/Source/performer.Transformer.js"></script>
+		
+		<script type="text/javascript" src="https://raw.github.com/barryvan/trackPerformer/master/Source/filter.Base.js"></script>
+		<script type="text/javascript" src="https://raw.github.com/barryvan/trackPerformer/master/Source/filter.FPS.js"></script>
+		<script type="text/javascript" src="https://raw.github.com/barryvan/trackPerformer/master/Source/filter.Grid.js"></script>
+		<script type="text/javascript" src="https://raw.github.com/barryvan/trackPerformer/master/Source/filter.Pick.js"></script>
+
+		<script type="text/javascript" src="https://raw.github.com/barryvan/trackPerformer/master/Examples/WeThreeKings/kings.js"></script>
+	</head>
+	
+	<body>
+		<div id="container"><div class="overlay"></div></div>
+		<div id="meta">
+			<div class="title">We Three Kings</div>
+			<div class="composer">Barry van Oudtshoorn</div>
+			<div class="url"><a href="http://www.barryvan.com.au/">barryvan.com.au</a></div>
+			<div class="url"><a href="http://barryvan.bandcamp.com/album/we-three-kings">barryvan.bandcamp.com/album/we-three-kings</a></div>
+		</div>
+		<div id="fps"></div>
+		<a href="http://github.com/barryvan/trackPerformer"><img style="" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"/></a>
+		<script type="text/javascript">
+			(function() {
+				$$('#container > .overlay').addEvent('click', function() {
+					if (window.controller && window.controller._toggle) window.controller._toggle();
+				});
+			})();
+		</script>
+	</body>
+</html>
