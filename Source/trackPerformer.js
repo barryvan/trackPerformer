@@ -34,6 +34,7 @@ barryvan.tp.Controller = new Class({
 	
 	options: {
 		background: 'rgba(255,255,255,0.05)',
+		scale: 1,
 		meta: {
 			visible: true,
 			vertical: -16,
@@ -79,12 +80,14 @@ barryvan.tp.Controller = new Class({
 			'events': {
 				'click': this._toggle
 			},
-			'width': dimensions.x,
-			'height': dimensions.y,
+			'width': dimensions.x / this.options.scale,
+			'height': dimensions.y / this.options.scale,
 			'styles': {
 				'position': 'absolute',
 				'top': 0,
-				'bottom': 0
+				'bottom': 0,
+				'width': dimensions.x,
+				'height': dimensions.y
 			}
 		}).inject(container || document.body);
 		
@@ -171,11 +174,11 @@ barryvan.tp.Controller = new Class({
 		this._context.textBaseline = 'hanging';
 		this._context.fillStyle = this.options.meta.colour;
 		
-		this._context.font = '14px monospace';
+		this._context.font = '14px "Trebuchet MS"';
 		
 		this._context.fillText(this._perfData.title || '', x, y, 200);
 		
-		this._context.font = '12px monospace';
+		this._context.font = '12px "Trebuchet MS"';
 		this._context.fillText(this._perfData.composer || '', x, y + 14, 200);
 		this._context.fillText(this._perfData.url || '', x, y + 26, 200);
 	},
@@ -184,7 +187,7 @@ barryvan.tp.Controller = new Class({
 		this._context.fillStyle = this.options.meta.colour;
 		this._context.textAlign = 'center';
 		this._context.textBaseline = 'middle';
-		this._context.font = '48px monospace';
+		this._context.font = '24px "Trebuchet MS"';
 		
 		this._context.fillText('Click to start', this._canvas.width / 2, this._canvas.height / 2);
 	},

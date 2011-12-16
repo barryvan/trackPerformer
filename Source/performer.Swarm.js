@@ -15,7 +15,9 @@ barryvan.tp.performer.Swarm = new Class({
 		maxParticleVelocity: 3,
 		maxSwarmVelocity: 2,
 		size: 2,
-		vitalisation: 150
+		vitalisation: 150,
+		knots: 1,
+		jitter: 0
 	},
 	
 	_vitality: 0,
@@ -105,11 +107,24 @@ barryvan.tp.performer.Swarm = new Class({
 			
 			if (!this._vitality) continue;
 			
-			this._context.fillStyle = p.c + (this._vitality / 100) + ')';
-			this._context.beginPath();
-			this._context.arc(p.x, p.y, size, 0, Math.TWOPI, false);
-			this._context.closePath();
-			this._context.fill();
+			if (this.options.knots <= 1) {
+				this._context.fillStyle = p.c + (this._vitality / 100) + ')';
+				this._context.beginPath();
+				this._context.arc(p.x, p.y, size, 0, Math.TWOPI, false);
+				this._context.closePath();
+				this._context.fill();
+			} else {
+				size = size * this.options.jitter;
+				this._context.lineWidth = 1;
+				this._context.strokeStyle = p.c + (this._vitality / 100) + ')';
+				this._context.beginPath();
+				this._context.moveTo(p.x, p.y);
+				for (var i = 0; i < this.options.knots; i++) {
+					this._context.lineTo(p.x + Number.random(-size, size), p.y + Number.random(-size, size));
+				}
+				this._context.closePath();
+				this._context.stroke();
+			}
 		}
 		
 		this._vitality = this._vitality - 0.5;
