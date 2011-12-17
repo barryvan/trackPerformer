@@ -11,7 +11,8 @@ barryvan.tp.filter.Grid = new Class({
 	options: {
 		colour: 'rgba(0,0,0,0.1)',
 		spacing: 32,
-		size: 1
+		size: 1,
+		lined: false
 	},
 	
 	_width: 0,
@@ -25,11 +26,28 @@ barryvan.tp.filter.Grid = new Class({
 	},
 	
 	frame: function() {
-		var step = this.options.spacing;
-		for (var x = step; x < this._width; x += step) {
-			for (var y = step; y < this._height; y += step) {
-				this._context.fillStyle = this.options.colour;
-				this._context.fillRect(x, y, this.options.size, this.options.size);
+		var stepX = this.options.spacing.x || this.options.spacing;
+		var stepY = this.options.spacing.y || this.options.spacing;
+		var fromX = 0, fromY = 0;
+		if (this.options.lined) {
+			this._context.lineWidth = this.options.size;
+			this._context.strokeStyle = this.options.colour;
+			this._context.beginPath();
+			for (var x = stepX + 0.5; x < this._width; x += stepX) {
+				this._context.moveTo(x, 0);
+				this._context.lineTo(x, this._height);
+			}
+			for (var y = stepY + 0.5; y < this._height; y += stepY) {
+				this._context.moveTo(0, y);
+				this._context.lineTo(this._width, y);
+			}
+			this._context.stroke();
+		} else {
+			this._context.fillStyle = this.options.colour;
+			for (var x = stepX; x < this._width; x += stepX) {
+				for (var y = stepY; y < this._height; y += stepY) {
+					this._context.fillRect(x, y, this.options.size, this.options.size);
+				}
 			}
 		}
 	},
