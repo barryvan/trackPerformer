@@ -16,7 +16,8 @@ barryvan.tp.performer.ShimmerGrid = new Class({
 		probability: 0.2,
 		vitalisation: 50,
 		opacity: 0.25,
-		jitter: 1
+		jitter: 1,
+		offset: null
 	},
 	
 	_vitality: 0,
@@ -27,6 +28,10 @@ barryvan.tp.performer.ShimmerGrid = new Class({
 		this.resize(this._canvas.width, this._canvas.height);
 		
 		this._colourPart = 'rgba(' + (new Color(this.options.colour)).join(',') + ',';
+		
+		if (this.options.offset === null) {
+			this.options.offset = Math.floor(this.options.spacing / 3);
+		}
 	},
 	
 	resize: function(width, height) {
@@ -52,8 +57,8 @@ barryvan.tp.performer.ShimmerGrid = new Class({
 				step = this.options.spacing,
 				x, y, jitterX, jitterY;
 		
-		for (x = Math.floor(step / 3); x < this._width; x += step) {
-			for (y = Math.floor(step / 3); y < this._height; y += step) {
+		for (x = this.options.offset; x < this._width; x += step) {
+			for (y = this.options.offset; y < this._height; y += step) {
 				if (Math.random() < this.options.probability) {
 					
 					this._context.fillStyle = this._colourPart + (((Math.random() / 2) + 0.5) * (this._vitality / this.options.vitalisation) * this.options.opacity) + ')';

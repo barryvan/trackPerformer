@@ -33,14 +33,14 @@ barryvan.tp.performer.Oscillator = new Class({
 	},
 	
 	noteEvent: function(data) {
-		if (!this.filterNote(data)) return;
-		
 		if (data.note < 0) {
 			this._currentNote = null;
 			this._vitality = this._vitality / 2;
 			// Note cut / note off
 			return;
 		}
+		
+		if (!this.filterNote(data)) return;
 		
 		this._currentNote = data.note;
 		

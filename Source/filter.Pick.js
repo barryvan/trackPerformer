@@ -57,9 +57,9 @@ barryvan.tp.filter.Pick = new Class({
 			
 			if (amount < 1) {
 				data[index + 0] = (data[swapIndex + 0] * amount + data[index + 0] * invAmount);
-				data[index + 1] = (data[swapIndex + 1] * amount + data[index + 0] * invAmount);
-				data[index + 2] = (data[swapIndex + 2] * amount + data[index + 0] * invAmount);
-				data[index + 3] = (data[swapIndex + 3] * amount + data[index + 0] * invAmount);
+				data[index + 1] = (data[swapIndex + 1] * amount + data[index + 1] * invAmount);
+				data[index + 2] = (data[swapIndex + 2] * amount + data[index + 2] * invAmount);
+				data[index + 3] = (data[swapIndex + 3] * amount + data[index + 3] * invAmount);
 			} else {
 				data[index + 0] = data[swapIndex + 0];
 				data[index + 1] = data[swapIndex + 1];
