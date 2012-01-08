@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+	<head>
+		<title>TrackPerformer</title>
+		<style>
+			body {
+				margin: 0;
+				padding: 0;
+				background: #ddd;
+				font-family: 'Trebuchet MS';
+				font-size: 10pt;
+				color: #666;
+			}
+			
+			a > img {
+				position: absolute;
+				top: 0;
+				right: 0;
+				border: 0;
+				z-index: 100;
+				opacity: 0.1;
+				-moz-transition: opacity 0.5s;
+				-webkit-transition: opacity 0.5s;
+				transition: opacity 0.5s;
+			}
+			
+			a > img:hover {
+				opacity: 1.0;
+			}
+			
+			#container {
+				position: relative;
+				width: 400px;
+				height: 400px;
+				margin: 24px auto;
+			}
+			
+			#container > canvas {
+				background: #000;
+			}
+			
+			#container > .overlay {
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				z-index: 2;
+				box-shadow: 0 2px 8px -2px #000;
+				border: solid 4px #ccc;
+			}
+			
+			#meta {
+				position: absolute;
+				bottom: 8px;
+				left: 8px;
+				padding: 8px;
+				background: #fff;
+				-moz-box-shadow: inset 0 0 4px #000;
+				-webkit-box-shadow: inset 0 0 4px #000;
+				box-shadow: inset 0 0 4px #000;
+				-moz-border-radius: 4px;
+				-webkit-border-radius: 4px;
+				border-radius: 4px;
+			}
+			
+			#meta > .title {
+				font-size: 125%;
+			}
+			
+			#meta > .composer {
+				
+			}
+			
+			#meta > .url {
+				
+			}
+			
+			#meta > .url > a {
+				color: #444;
+				text-decoration: none;
+			}
+			
+			#meta > .url > a:hover {
+				color: #666;
+				text-decoration: none;
+			}
+
+			#fps {
+				position: absolute;
+				bottom: 0;
+				right: 0;
+				width: 40px;
+				text-align: right;
+				padding: 4px;
+				color: #aaa;
+				width: 100px;
+				font-size: 8pt;
+			}
+		</style>
+		<script type="text/javascript" src="../Source/mootools-core.js"></script>
+		<script type="text/javascript" src="../Source/mootools-more.js"></script>
+		<script type="text/javascript" src="../Source/trackPerformer.js"></script>
+
+		<script type="text/javascript" src="../Source/performer.Base.js"></script>
+		<script type="text/javascript" src="../Source/performer.Morse.js"></script>
+		<script type="text/javascript" src="../Source/performer.Oscillator.js"></script>
+		<script type="text/javascript" src="../Source/performer.ShimmerGrid.js"></script>
+		<script type="text/javascript" src="../Source/performer.SignalTracker.js"></script>
+		<script type="text/javascript" src="../Source/performer.Swarm.js"></script>
+		<script type="text/javascript" src="../Source/performer.Thumper.js"></script>
+		<script type="text/javascript" src="../Source/performer.Tracer.js"></script>
+		<script type="text/javascript" src="../Source/performer.Transformer.js"></script>
+		
+		<script type="text/javascript" src="/../Source/filter.Base.js"></script>
+		<script type="text/javascript" src="../Source/filter.FPS.js"></script>
+		<script type="text/javascript" src="../Source/filter.Grid.js"></script>
+		<script type="text/javascript" src="../Source/filter.Pick.js"></script>
+
+		<!-- Add a link to your source here; for example:
+		<script type="text/javascript" src="my-performance-file.js"></script>
+		-->
+	</head>
+	
+	<body>
+		<div id="container"><div class="overlay"></div></div>
+		<div id="meta">
+			<div class="title">Track Title</div>
+			<div class="composer">Composer</div>
+			<div class="url"><a href="http://www.barryvan.com.au/">URL</a></div>
+		</div>
+		<div id="fps"></div>
+		<script type="text/javascript">
+			(function() {
+				$$('#container > .overlay').addEvent('click', function() {
+					if (window.controller && window.controller._toggle) window.controller._toggle();
+				});
+			})();
+		</script>
+	</body>
+</html>
