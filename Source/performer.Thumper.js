@@ -25,7 +25,7 @@ barryvan.tp.performer.Thumper = new Class({
 		}
 		
 		if (this.filterNote(data.note)) {
-			this._context.fillStyle = this._colourFragment + (((data.note === undefined ? 64 : data.note) / 64) * this.options.opacity) + ')';
+			this._context.fillStyle = this._colourFragment + (((data.volume === undefined ? 64 : data.volume) / 64) * this.options.opacity) + ')';
 			this._context.fillRect(0, 0, this._canvas.width, this._canvas.height);
 		}
 	}

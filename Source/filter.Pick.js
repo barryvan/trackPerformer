@@ -5,6 +5,7 @@ barryvan.tp.filter.Pick = new Class({
 	Extends: barryvan.tp.filter.Base,
 	
 	Binds: [
+		'updateOpts',
 		'frame',
 		'resize'
 	],
@@ -29,6 +30,10 @@ barryvan.tp.filter.Pick = new Class({
 		this.options.amount = this.options.amount.limit(0, 1);
 		
 		this.resize(this._canvas.width, this._canvas.height);
+	},
+	
+	updateOpts: function(options) {
+		this.options = Object.merge(this.options, options);
 	},
 	
 	frame: function() {

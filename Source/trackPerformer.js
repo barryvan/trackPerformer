@@ -223,7 +223,10 @@ barryvan.tp.Controller = new Class({
 				var perf = instrument.performers[j];
 				if (typeOf(perf.performer) !== 'class') continue;
 				var opts = Object.merge({}, this.options, perf.options);
-				this._performers[i].push(new perf.performer(this._context, this._canvas, opts));
+				
+				var newPerf = new perf.performer(this._context, this._canvas, opts);
+				newPerf.__enabled__ = true;
+				this._performers[i].push(newPerf);
 			}
 		}
 	},
@@ -235,7 +238,10 @@ barryvan.tp.Controller = new Class({
 			var item = this._perfData.prefilters[i];
 			if (typeOf(item.filter) !== 'class') continue;
 			var opts = Object.merge({}, this.options, item.options);
-			this._prefilters.push(new item.filter(this._context, this._canvas, opts));
+			
+			var newFilt = new item.filter(this._context, this._canvas, opts);
+			newFilt.__enabled__ = true;
+			this._prefilters.push(newFilt);
 		}
 	},
 	
@@ -247,7 +253,10 @@ barryvan.tp.Controller = new Class({
 			var item = this._perfData.postfilters[i];
 			if (typeOf(item.filter) !== 'class') continue;
 			var opts = Object.merge({}, this.options, item.options);
-			this._postfilters.push(new item.filter(this._context, this._canvas, opts));
+			
+			var newFilt = new item.filter(this._context, this._canvas, opts);
+			newFilt.__enabled__ = true;
+			this._postfilters.push(newFilt);
 		}
 	},
 	
@@ -275,6 +284,8 @@ barryvan.tp.Controller = new Class({
 		this._playing = true;
 		this._audio.play();
 		
+		this._canvas.setStyle('cursor', 'none');
+		
 		window.requestAnimFrame(this._tick, this._canvas);
 	},
 	
@@ -284,8 +295,9 @@ barryvan.tp.Controller = new Class({
 		var currentTicks = Math.floor(this._currentTime / this._tickLength);
 		var processCount = currentTicks - this._ticksElapsed;
 		
+		// Process prefilters
 		for (var i = 0; i < this._prefilters.length; i++) {
-			if (this._prefilters[i].frame) this._prefilters[i].frame();
+			if (this._prefilters[i].__enabled__ && this._prefilters[i].frame) this._prefilters[i].frame();
 		}
 		
 		this._context.fillStyle = this.options.background;
@@ -306,36 +318,110 @@ barryvan.tp.Controller = new Class({
 					patternRows = this._perfData.patterns[this._currentPattern].rows;
 				}
 				
+				// Process automation
+				if (this._perfData.automation && this._perfData.automation[this._currentPattern]) {
+					var patternAutomation = this._perfData.automation[this._currentPattern];
+					if (patternAutomation[this._currentRow]) {
+						var automations = patternAutomation[this._currentRow];
+						for (var i = 0; i < automations.length; i++) {
+							var automation = automations[i];
+							
+							if (automation.instrument || automation.instrument === 0) {
+								// Instrument automation
+								if (!this._performers[automation.instrument]) continue;
+								var autoPerfs = this._performers[automation.instrument];
+								
+								if (automation.performer || automation.performer === 0) {
+									if (!autoPerfs[automation.performer]) continue;
+									
+									var autoPerf = autoPerfs[automation.performer];
+									switch (automation.action) {
+										case 'enable':
+											autoPerf.__enabled__ = true;
+											break;
+										case 'disable':
+											autoPerf.__enabled__ = false;
+											break;
+										case 'setOpts':
+											if (automation.options && autoPerf.updateOpts) autoPerf.updateOpts(automation.options);
+											break;
+									} // switch
+									
+								} // if performer
+								// End instrument automation
+								
+							} else if (automation.prefilter || automation.prefilter === 0) {
+								// Prefilter automation
+								if (!this._prefilters[automation.prefilter]) continue;
+								var filter = this._prefilters[automation.prefilter];
+								switch (automation.action) {
+									case 'enable':
+										filter.__enabled__ = true;
+										break;
+									case 'disable':
+										filter.__enabled__ = false;
+										break;
+									case 'setOpts':
+										if (automation.options && filter.updateOpts) filter.updateOpts(automation.options);
+										break;
+								} // switch
+								// End prefilter automation
+								
+							} else if (automation.postfilter || automation.postfilter === 0) {
+								// Postfilter automation
+								if (!this._postfilters[automation.postfilter]) continue;
+								var filter = this._postfilters[automation.postfilter];
+								switch (automation.action) {
+									case 'enable':
+										filter.__enabled__ = true;
+										break;
+									case 'disable':
+										filter.__enabled__ = false;
+										break;
+									case 'setOpts':
+										if (automation.options && filter.updateOpts) filter.updateOpts(automation.options);
+										break;
+								} // switch
+								// End postfilter automation
+							}
+						}
+					}
+				}
+				
+				// Process performer note events
 				var rowData = patternRows[this._currentRow];
 				for (var i = 0; i < rowData.length; i++) {
 					if (!rowData[i].instrument) continue;
 					var performers = this._performers[rowData[i].instrument - 1]; // Instruments are indexed from 1
 					if (!(performers && performers.length)) continue;
 					for (var j = 0; j < performers.length; j++) {
-						if (performers[j] && performers[j].noteEvent) performers[j].noteEvent(rowData[i]);
+						if (performers[j] && performers[j].__enabled__ && performers[j].noteEvent) performers[j].noteEvent(rowData[i]);
 					}
 				}
 				
+				// Process performer ticks
 				for (var i = 0; i < this._performers.length; i++) {
 					var performers = this._performers[i]; // Instruments are indexed from 1
 					if (!(performers && performers.length)) continue;
 					for (var j = 0; j < performers.length; j++) {
-						if (performers[j] && performers[j].tick) performers[j].tick();
+						if (performers[j] && performers[j].__enabled__ && performers[j].tick) performers[j].tick();
 					}
 				}
 			}
 		}
 		
+		// Process performer frames
 		for (var i = 0; i < this._performers.length; i++) {
 			var performers = this._performers[i]; // Instruments are indexed from 1
 			if (!(performers && performers.length)) continue;
 			for (var j = 0; j < performers.length; j++) {
-				if (performers[j] && performers[j].frame) performers[j].frame();
+				if (performers[j] && performers[j].__enabled__ && performers[j].frame) performers[j].frame();
 			}
 		}
 		
+		// Process postfilters
 		for (var i = 0; i < this._postfilters.length; i++) {
-			if (this._postfilters[i].frame) this._postfilters[i].frame();
+			if (this._postfilters[i].__enabled__ && this._postfilters[i].frame) this._postfilters[i].frame();
 		}
 		
 		this._renderMeta();

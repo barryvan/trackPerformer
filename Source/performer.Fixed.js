@@ -1,36 +1,35 @@
-barryvan.tp.performer.Oscillator = new Class({
+barryvan.tp.performer.Fixed = new Class({
 	Implements: [Options],
 	
 	Extends: barryvan.tp.performer.Base,
 	
 	Binds: [
+		'updateOpts',
 		'noteEvent',
 		'frame',
 		'tick',
-		'_drawNote',
-		'resize'
+		'_drawNote'
 	],
 	
 	options: {
 		colour: '#729fcf',
-		vertical: 32,
-		horizontal: 32,
-		length: 48,
-		middle: 60,
-		thickness: 8,
-		stepSize: 8,
+		x: 10,
+		y: 10,
+		width: 10,
+		height: 10,
 		sustain: false,
 		vitalisation: 0,
 		honourCuts: true
 	},
 	
-	_currentNote: null,
 	_vitality: 0,
 	
 	initialize: function(context, canvas, options) {
 		this.parent(context, canvas, options);
-		
-		this.resize(this._canvas.width, this._canvas.height);
+	},
+	
+	updateOpts: function(options) {
+		this.options = Object.merge(this.options, options);
 	},
 	
 	noteEvent: function(data) {
@@ -68,27 +67,16 @@ barryvan.tp.performer.Oscillator = new Class({
 	_drawNote: function() {
 		if (!this._currentNote) return;
 		
-		var n = this.options.middle - this._currentNote;
-		var y = this._centre + (n * this.options.stepSize) - (this.options.thickness / 2);
-		
 		if (this.options.vitalisation) {
 			var prev_alpha = this._context.globalAlpha;
 			this._context.globalAlpha = this._vitality / this.options.vitalisation;
 		}
 		
 		this._context.fillStyle = this.options.colour;
-		this._context.fillRect(this._left, y, this.options.length, this.options.thickness);
+		this._context.fillRect(this.options.x, this.options.y, this.options.width, this.options.height);
 		
 		if (this.options.vitalisation) {
 			this._context.globalAlpha = prev_alpha;
 		}
-	},
-	
-	resize: function(width, height) {
-		this._left = (this.options.horizontal > 0 ? this.options.horizontal : (width + this.options.horizontal - this.options.length));
-		this._top = Math.abs(this.options.vertical);
-		this._bottom = height - this._top;
-		
-		this._centre = (this._bottom - this._top) / 2;
 	}
 });

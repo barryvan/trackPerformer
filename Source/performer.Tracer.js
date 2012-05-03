@@ -19,7 +19,8 @@ barryvan.tp.performer.Tracer = new Class({
 		tailSegments: 2,
 		thickness: 1,
 		probability: 0.25,
-		opacity: 1
+		opacity: 1,
+		jitter: 0
 	},
 	
 	_vitality: 0,
@@ -67,7 +68,9 @@ barryvan.tp.performer.Tracer = new Class({
 		var q = this.options.thickness % 2 ? 0.5 : 0;
 		
 		for (var i = 0; i < this._particles.length; i++) {
-			var p = this._particles[i];
+			var p = this._particles[i],
+					jitterX = 0,
+					jitterY = 0;
 			
 			if ((p.horizontal && !(p.x % this.options.decisions)) ||
 					((!p.horizontal) && !(p.y % this.options.decisions))) {
@@ -97,18 +100,23 @@ barryvan.tp.performer.Tracer = new Class({
 			
 			var l = Math.min(this.options.tailSegments, p.pastX.length, p.pastY.length);
 			
+			if (this.options.jitter) {
+				jitterX = (Math.random() * (this.options.jitter * 2)) - this.options.jitter;
+				jitterY = (Math.random() * (this.options.jitter * 2)) - this.options.jitter;
+			}
+			
 			for (var j = 1; j < l - 1; j++) {
 				this._context.strokeStyle = this._colourPart + (a * ((j + 1) / l)) + ')';
 				this._context.beginPath();
-				this._context.moveTo(p.pastX[j - 1] + q, p.pastY[j - 1] + q);
-				this._context.lineTo(p.pastX[j] + q, p.pastY[j] + q);
+				this._context.moveTo(p.pastX[j - 1] + q + jitterX, p.pastY[j - 1] + q + jitterY);
+				this._context.lineTo(p.pastX[j] + q + jitterX, p.pastY[j] + q + jitterY);
 				this._context.stroke();
 			}
 			
 			this._context.strokeStyle = this._colourPart + a + ')';
 			this._context.beginPath();
-			this._context.moveTo(p.pastX[l - 1] + q, p.pastY[l - 1] + q);
-			this._context.lineTo(p.x + q, p.y + q);
+			this._context.moveTo(p.pastX[l - 1] + q + jitterX, p.pastY[l - 1] + q + jitterY);
+			this._context.lineTo(p.x + q + jitterX, p.y + q + jitterY);
 			this._context.stroke();
 		}
 		

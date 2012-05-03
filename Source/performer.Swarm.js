@@ -95,6 +95,7 @@ barryvan.tp.performer.Swarm = new Class({
 			size = size * ((this._vitality - this._shrinkThreshold - 1) / 4);
 		} // else Stable.
 		if (size < this.options.size) size = this.options.size;
+		if (this.options.knots > 1) size = size * this.options.jitter;
 		
 		for (var i = 0; i < this._particles.length; i++) {
 			var p = this._particles[i];
@@ -114,12 +115,11 @@ barryvan.tp.performer.Swarm = new Class({
 				this._context.closePath();
 				this._context.fill();
 			} else {
-				size = size * this.options.jitter;
 				this._context.lineWidth = 1;
 				this._context.strokeStyle = p.c + (this._vitality / 100) + ')';
 				this._context.beginPath();
 				this._context.moveTo(p.x, p.y);
-				for (var i = 0; i < this.options.knots; i++) {
+				for (var j = 0; j < this.options.knots; j++) {
 					this._context.lineTo(p.x + Number.random(-size, size), p.y + Number.random(-size, size));
 				}
 				this._context.closePath();
